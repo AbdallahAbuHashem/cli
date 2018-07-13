@@ -2,11 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.IO;
 using System.Linq;
 using Microsoft.Build.Evaluation;
 using Microsoft.DotNet.Cli;
 using Microsoft.DotNet.Cli.CommandLine;
 using Microsoft.DotNet.Cli.Utils;
+using Microsoft.DotNet.Tools.Common;
 
 namespace Microsoft.DotNet.Tools.List.ProjectToProjectReferences
 {
@@ -23,7 +25,7 @@ namespace Microsoft.DotNet.Tools.List.ProjectToProjectReferences
                 throw new ArgumentNullException(nameof(appliedCommand));
             }
 
-            _fileOrDirectory = appliedCommand.Arguments.Single();
+            _fileOrDirectory = appliedCommand.Arguments.Count == 0 ? PathUtility.EnsureTrailingSlash(Directory.GetCurrentDirectory()) : appliedCommand.Arguments.Single();
         }
 
         public override int Execute()

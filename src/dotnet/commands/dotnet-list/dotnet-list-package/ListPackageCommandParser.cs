@@ -3,23 +3,20 @@
 
 using Microsoft.DotNet.Cli.CommandLine;
 using Microsoft.DotNet.Tools;
-using LocalizableStrings = Microsoft.DotNet.Tools.List.ProjectToProjectReferences.LocalizableStrings;
+using LocalizableStrings = Microsoft.DotNet.Tools.List.PackageReferences.LocalizableStrings;
 
 namespace Microsoft.DotNet.Cli
 {
-    internal static class ListProjectToProjectReferencesCommandParser
+    internal static class ListPackageReferencesCommandParser
     {
-        public static Command ListProjectToProjectReferences()
-        {
-            return Create.Command(
-                "reference",
+        public static Command ListPackageReferences() => Create.Command(
+                "package",
                 LocalizableStrings.AppFullName,
                 Accept.ZeroOrOneArgument()
                 .With(
-                    name: CommonLocalizableStrings.ProjectArgumentName,
-                    description: CommonLocalizableStrings.ProjectArgumentDescription)
+                    name: CommonLocalizableStrings.SolutionOrProjectArgumentName,
+                    description: CommonLocalizableStrings.SolutionOrProjectArgumentDescription)
                 .DefaultToCurrentDirectory(),
                 CommonOptions.HelpOption());
-        }
     }
 }

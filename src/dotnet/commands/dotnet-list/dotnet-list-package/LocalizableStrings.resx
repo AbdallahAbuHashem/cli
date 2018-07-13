@@ -117,7 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NetListCommand" xml:space="preserve">
-    <value>List references or packages of a .NET project.</value>
+  <data name="AppFullName" xml:space="preserve">
+    <value>List all packages references of the project.</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Command to list project to project references</value>
+  </data>
+  <data name="NoReferencesFound" xml:space="preserve">
+    <value>There are no {0} references in project {1}.
+{0} is the type of the item being requested (project, package, p2p) and {1} is the object operated on (a project file or a solution file). </value>
   </data>
 </root>

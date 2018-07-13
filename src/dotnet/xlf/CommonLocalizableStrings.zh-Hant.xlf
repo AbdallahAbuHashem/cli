@@ -893,6 +893,16 @@ setx PATH "%PATH%;{0}"
         <target state="translated">VERSION_SUFFIX</target>
         <note />
       </trans-unit>
+      <trans-unit id="SolutionOrProjectDescription">
+        <source>The project or solution file to operate on. If a file is not specified, the command will search the current directory for solution then a project.</source>
+        <target state="new">The project or solution file to operate on. If a file is not specified, the command will search the current directory for solution then a project.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SolutionOrProjectName">
+        <source>FILE_PATH</source>
+        <target state="new">FILE_PATH</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -7,6 +7,8 @@ using Microsoft.DotNet.Cli;
 using Microsoft.DotNet.Cli.CommandLine;
 using Microsoft.DotNet.Cli.Utils;
 using Microsoft.DotNet.Tools.List.ProjectToProjectReferences;
+using Microsoft.DotNet.Tools.List.PackageReferences;
+using System.Diagnostics;
 
 namespace Microsoft.DotNet.Tools.List
 {
@@ -23,11 +25,23 @@ namespace Microsoft.DotNet.Tools.List
                 {
                     "reference",
                     o => new ListProjectToProjectReferencesCommand(o, ParseResult)
+                },
+                {
+                    "package",
+                    o => new ListPackageReferencesCommand(o, ParseResult)
                 }
             };
 
         public static int Run(string[] args)
         {
+            Console.WriteLine("Waiting for debugger to attach.");
+            Console.WriteLine($"Process ID: {Process.GetCurrentProcess().Id}");
+
+            while (!Debugger.IsAttached)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+            Debugger.Break();
             return new ListCommand().RunCommand(args);
         }
     }

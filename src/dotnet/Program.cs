@@ -19,6 +19,7 @@ using NuGet.Frameworks;
 using Command = Microsoft.DotNet.Cli.Utils.Command;
 using RuntimeEnvironment = Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment;
 using LocalizableStrings = Microsoft.DotNet.Cli.Utils.LocalizableStrings;
+using System.Diagnostics;
 
 namespace Microsoft.DotNet.Cli
 {
@@ -28,7 +29,6 @@ namespace Microsoft.DotNet.Cli
 
         public static int Main(string[] args)
         {
-            DebugHelper.HandleDebugSwitch(ref args);
 
             new MulticoreJitActivator().TryActivateMulticoreJit();
 
