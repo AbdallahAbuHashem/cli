@@ -19,6 +19,56 @@
 {0} é o tipo do item solicitado (projeto, pacote, p2p) e {1} é o objeto no qual ocorre a operação (um arquivo de projeto ou de solução). </target>
         <note />
       </trans-unit>
+      <trans-unit id="SolutionOrProjectArgumentDescription">
+        <source>The project or solution file to operate on. If a file is not specified, the command will search the current directory for solution then a project.</source>
+        <target state="new">The project or solution file to operate on. If a file is not specified, the command will search the current directory for solution then a project.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SolutionOrProjectArgumentName">
+        <source>PROJECT | SOLUTION</source>
+        <target state="new">PROJECT | SOLUTION</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdDeprecatedDescription">
+        <source>Lists deprecated packages</source>
+        <target state="new">Lists deprecated packages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdFramework">
+        <source>Enter a framework to show its packages</source>
+        <target state="new">Enter a framework to show its packages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdFrameworkDescription">
+        <source>Chooses a framework to show its packages</source>
+        <target state="new">Chooses a framework to show its packages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdOutdatedDescription">
+        <source>Lists outdated packages</source>
+        <target state="new">Lists outdated packages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdTransitiveDescription">
+        <source>Lists transitive and top-level packages</source>
+        <target state="new">Lists transitive and top-level packages</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MultipleProjectsFound">
+        <source>The directory given includes multiple projects. Please specify one of the following projects</source>
+        <target state="new">The directory given includes multiple projects. Please specify one of the following projects</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MultipleSolutionsFound">
+        <source>The directory given includes multiple solutions. Please specify one of the following solutions</source>
+        <target state="new">The directory given includes multiple solutions. Please specify one of the following solutions</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="NoProjectsOrSolutions">
+        <source>The given directory does not include any solution or project</source>
+        <target state="new">The given directory does not include any solution or project</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

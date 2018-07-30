@@ -13,7 +13,11 @@ namespace Microsoft.DotNet.Cli
         public static Command List() => Create.Command(
             "list",
             LocalizableStrings.NetListCommand,
-            Accept.ZeroOrOneArgument(),
+            Accept.ZeroOrOneArgument()
+            .With(
+                    name: CommonLocalizableStrings.SolutionOrProjectArgumentName,
+                    description: CommonLocalizableStrings.SolutionOrProjectArgumentDescription)
+            .DefaultToCurrentDirectory(),
             ListPackageReferencesCommandParser.ListPackageReferences(),
             ListProjectToProjectReferencesCommandParser.ListProjectToProjectReferences(),
             CommonOptions.HelpOption());

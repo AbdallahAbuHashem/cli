@@ -25,7 +25,9 @@ namespace Microsoft.DotNet.Tools.List.ProjectToProjectReferences
                 throw new ArgumentNullException(nameof(appliedCommand));
             }
 
-            _fileOrDirectory = appliedCommand.Arguments.Count == 0 ? PathUtility.EnsureTrailingSlash(Directory.GetCurrentDirectory()) : appliedCommand.Arguments.Single();
+            _fileOrDirectory = appliedCommand.Arguments.Count == 0 ?
+                               PathUtility.EnsureTrailingSlash(Directory.GetCurrentDirectory()) :
+                               PathUtility.GetAbsolutePath(Directory.GetCurrentDirectory(), appliedCommand.Arguments.Single());
         }
 
         public override int Execute()

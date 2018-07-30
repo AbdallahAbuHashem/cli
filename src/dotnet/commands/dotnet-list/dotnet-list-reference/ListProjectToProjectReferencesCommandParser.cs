@@ -14,11 +14,7 @@ namespace Microsoft.DotNet.Cli
             return Create.Command(
                 "reference",
                 LocalizableStrings.AppFullName,
-                Accept.ZeroOrOneArgument()
-                .With(
-                    name: CommonLocalizableStrings.ProjectArgumentName,
-                    description: CommonLocalizableStrings.ProjectArgumentDescription)
-                .DefaultToCurrentDirectory(),
+                Accept.ZeroOrOneArgument(),
                 CommonOptions.HelpOption());
         }
     }
