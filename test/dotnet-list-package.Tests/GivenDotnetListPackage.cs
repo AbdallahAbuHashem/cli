@@ -113,5 +113,132 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
                 .And.HaveStdOutContainingIgnoreSpaces("Microsoft.NETCore.App");
         }
 
+        [Fact]
+        public void AssetsPathExistsButNotRestored()
+        {
+            var testAsset = "NewtonSoftDependentProject";
+            var projectDirectory = TestAssets
+                .Get(testAsset)
+                .CreateInstance()
+                .WithSourceFiles()
+                .Root
+                .FullName;
+
+            new ListPackageCommand()
+                .WithPath(projectDirectory)
+                .Execute()
+                .Should()
+                .Pass()
+                .And.HaveStdErr();
+        }
+
+        [Fact]
+        public void TransitivePackagePrinted()
+        {
+            var testAsset = "NewtonSoftDependentProject";
+            var projectDirectory = TestAssets
+                .Get(testAsset)
+                .CreateInstance()
+                .WithSourceFiles()
+                .Root
+                .FullName;
+
+            new RestoreCommand()
+              .WithWorkingDirectory(projectDirectory)
+              .Execute()
+              .Should()
+              .Pass()
+              .And.NotHaveStdErr();
+
+            new ListPackageCommand()
+                .WithPath(projectDirectory)
+                .Execute()
+                .Should()
+                .Pass()
+                .And.NotHaveStdErr()
+                .And.NotHaveStdOutContaining("System.IO.FileSystem");
+
+            new ListPackageCommand()
+                .WithPath(projectDirectory)
+                .Execute(args:"--include-transitive")
+                .Should()
+                .Pass()
+                .And.NotHaveStdErr()
+                .And.HaveStdOutContaining("System.IO.FileSystem");
+        }
+
+        [Theory]
+        [InlineData("", "'net451'", null)]
+        [InlineData("", "'netcoreapp2.2'", null)]
+        [InlineData("--framework=netcoreapp2.2,net451,randomtext", "'net451'", null)]
+        [InlineData("--framework=netcoreapp2.2,net451,randomtext", "'netcoreapp2.2'", null)]
+        [InlineData("--framework=netcoreapp2.2", "'netcoreapp2.2'", "'net451'")]
+        [InlineData("--framework=randomtext", "No packages were found for the project", "'netcoreapp2.2'")]
+        public void FrameworkSpecificList(string args, string shouldInclude, string shouldntInclude)
+        {
+            var testAsset = "MSBuildAppWithMultipleFrameworks";
+            var projectDirectory = TestAssets
+                .Get(testAsset)
+                .CreateInstance()
+                .WithSourceFiles()
+                .Root
+                .FullName;
+
+            new RestoreCommand()
+              .WithWorkingDirectory(projectDirectory)
+              .Execute()
+              .Should()
+              .Pass()
+              .And.NotHaveStdErr();
+
+            if (shouldntInclude == null)
+            {
+                new ListPackageCommand()
+                .WithPath(projectDirectory)
+                .Execute(args)
+                .Should()
+                .Pass()
+                .And.NotHaveStdErr()
+                .And.HaveStdOutContainingIgnoreSpaces(shouldInclude.Replace(" ", ""));
+            }
+            else
+            {
+                new ListPackageCommand()
+                .WithPath(projectDirectory)
+                .Execute(args)
+                .Should()
+                .Pass()
+                .And.NotHaveStdErr()
+                .And.HaveStdOutContainingIgnoreSpaces(shouldInclude.Replace(" ", ""))
+                .And.NotHaveStdOutContaining(shouldntInclude.Replace(" ", ""));
+            }
+            
+        }
+
+        [Fact]
+        public void FSharpProject()
+        {
+            var testAsset = "FSharpTestAppSimple";
+            var projectDirectory = TestAssets
+                .Get(testAsset)
+                .CreateInstance()
+                .WithSourceFiles()
+                .Root
+                .FullName;
+
+            new RestoreCommand()
+              .WithWorkingDirectory(projectDirectory)
+              .Execute()
+              .Should()
+              .Pass()
+              .And.NotHaveStdErr();
+
+            new ListPackageCommand()
+                .WithPath(projectDirectory)
+                .Execute()
+                .Should()
+                .Pass()
+                .And.NotHaveStdErr();
+        }
     }
 }
