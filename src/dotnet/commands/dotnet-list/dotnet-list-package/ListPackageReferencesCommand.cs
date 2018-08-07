@@ -85,7 +85,58 @@ namespace Microsoft.DotNet.Tools.List.PackageReferences
                 .Single());
             }
 
+            if (_appliedCommand.HasOption("include-prerelease"))
+            {
+                CheckForOutdated("--include-prerelease");
+                args.Add("--include-prerelease");
+            }
+
+            if (_appliedCommand.HasOption("highest-patch"))
+            {
+                CheckForOutdated("--highest-patch");
+                args.Add("--highest-patch");
+            }
+
+            if (_appliedCommand.HasOption("highest-minor"))
+            {
+                CheckForOutdated("--highest-minor");
+                args.Add("--highest-minor");
+            }
+
+            if (_appliedCommand.HasOption("config"))
+            {
+                CheckForOutdated("--config");
+                args.Add("--config");
+                args.Add(ConfigAbsolutePath());
+            }
+
+            if (_appliedCommand.HasOption("source"))
+            {
+                CheckForOutdated("--source");
+                args.Add("--source");
+                args.Add(_appliedCommand
+                .AppliedOptions["source"]
+                .Arguments
+                .Single());
+            }
+
             return args.ToArray();
+        }
+
+        private string ConfigAbsolutePath()
+        {
+            return PathUtility.GetAbsolutePath(PathUtility.EnsureTrailingSlash(Directory.GetCurrentDirectory()),
+                                        _appliedCommand.AppliedOptions["config"].Arguments.Single());
+        }
+
+        private void CheckForOutdated(string option)
+        {
+            if (!_appliedCommand.HasOption("outdated"))
+            {
+                throw new Exception(string.Format(LocalizableStrings.OutdatedOptionOnly, option));
+
+            }
+            
         }
 
         private string GetProjectOrSolution()

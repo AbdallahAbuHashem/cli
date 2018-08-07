@@ -15,16 +15,32 @@ namespace Microsoft.DotNet.Cli
                 LocalizableStrings.AppFullName,
                 Accept.ZeroOrOneArgument(),
                 CommonOptions.HelpOption(),
-                Create.Option("-o|--outdated",
+                Create.Option("--outdated",
                               LocalizableStrings.CmdOutdatedDescription),
-                Create.Option("-f|--framework",
+                Create.Option("--framework",
                               LocalizableStrings.CmdFrameworkDescription,
                               Accept.ExactlyOneArgument()
                                     .With(name: LocalizableStrings.CmdFramework)
                                     .ForwardAsSingle(o => $"--framework {o.Arguments.Single()}")),
-                Create.Option("-d|--deprecated",
+                Create.Option("--deprecated",
                               LocalizableStrings.CmdDeprecatedDescription),
-                Create.Option("-i|--include-transitive",
-                              LocalizableStrings.CmdTransitiveDescription));
+                Create.Option("--include-transitive",
+                              LocalizableStrings.CmdTransitiveDescription),
+                Create.Option("--include-prerelease",
+                              LocalizableStrings.CmdPrereleaseDescription),
+                Create.Option("--highest-patch",
+                              LocalizableStrings.CmdHighestPatchDescription),
+                Create.Option("--highest-minor",
+                              LocalizableStrings.CmdHighestMinorDescription),
+                Create.Option("--config",
+                              LocalizableStrings.CmdConfigDescription,
+                              Accept.ExactlyOneArgument()
+                                    .With(name: LocalizableStrings.CmdConfig)
+                                    .ForwardAsSingle(o => $"--config {o.Arguments.Single()}")),
+                Create.Option("--source",
+                              LocalizableStrings.CmdSourceDescription,
+                              Accept.ExactlyOneArgument()
+                                    .With(name: LocalizableStrings.CmdSource)
+                                    .ForwardAsSingle(o => $"--source {o.Arguments.Single()}")));
     }
 }

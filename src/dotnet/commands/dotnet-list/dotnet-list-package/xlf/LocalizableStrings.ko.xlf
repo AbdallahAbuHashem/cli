@@ -69,6 +69,46 @@
         <target state="new">The given directory does not include any solution or project</target>
         <note />
       </trans-unit>
+      <trans-unit id="CmdConfig">
+        <source>Enter a config file path</source>
+        <target state="new">Enter a config file path</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdConfigDescription">
+        <source>Works only with `--outdated`. A path to a config file to specify sources</source>
+        <target state="new">Works only with `--outdated`. A path to a config file to specify sources</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdHighestMinorDescription">
+        <source>Works only with `--outdated`. Considers only the versions that have matching major</source>
+        <target state="new">Works only with `--outdated`. Considers only the versions that have matching major</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdHighestPatchDescription">
+        <source>Works only with `--outdated`. Considers only the versions that have matching minor and major</source>
+        <target state="new">Works only with `--outdated`. Considers only the versions that have matching minor and major</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdPrereleaseDescription">
+        <source>Works only with `--outdated`. Considers prerelease versions when looking for latest</source>
+        <target state="new">Works only with `--outdated`. Considers prerelease versions when looking for latest</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdSource">
+        <source>Enter sources for latest</source>
+        <target state="new">Enter sources for latest</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CmdSourceDescription">
+        <source>Works only with `--outdated`. Sources to lookup for latest versions</source>
+        <target state="new">Works only with `--outdated`. Sources to lookup for latest versions</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OutdatedOptionOnly">
+        <source>This option `{0}` should only be used with `--outdated` present</source>
+        <target state="new">This option `{0}` should only be used with `--outdated` present</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>
