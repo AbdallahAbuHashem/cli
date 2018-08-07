@@ -2,12 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using FluentAssertions;
-using Microsoft.Build.Construction;
-using Microsoft.DotNet.Tools;
 using Microsoft.DotNet.Tools.Test.Utilities;
-using Msbuild.Tests.Utilities;
-using System;
-using System.IO;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -55,7 +50,7 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
                 .Should()
                 .Pass()
                 .And.NotHaveStdErr()
-                .And.HaveStdOutContainingIgnoreSpaces(packageName+packageVersion+packageVersion);
+                .And.HaveStdOutContainingIgnoreSpaces(packageName+"["+packageVersion+",)"+packageVersion);
         }
 
         [Fact]
@@ -240,5 +235,42 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
                 .Pass()
                 .And.NotHaveStdErr();
         }
+
+        [Theory]
+        [InlineData("RestSharp", "105.0.0", "--highest-patch", "105.0.1")]
+        [InlineData("RestSharp", "105.0.0", "--highest-minor", "105.2.3")]
+        [InlineData("SlowCheetah.Xdt", "1.1.1", "--include-prerelease", "1.1.7-beta")]
+        [InlineData("SlowCheetah.Xdt", "1.1.1-beta", "", "1.1.7-beta")]
+        public void OutdatedVersionsTests(string packageName, string currentVersion, string args, string expectedVersion)
+        {
+            var testAsset = "TestAppSimple";
+            var projectDirectory = TestAssets
+                .Get(testAsset)
+                .CreateInstance()
+                .WithSourceFiles()
+                .Root
+                .FullName;
+
+            var cmd = new DotnetCommand()
+                .WithWorkingDirectory(projectDirectory)
+                .ExecuteWithCapturedOutput($"add package {packageName} --version {currentVersion}");
+            cmd.Should().Pass();
+
+            new RestoreCommand()
+               .WithWorkingDirectory(projectDirectory)
+               .Execute()
+               .Should()
+               .Pass()
+               .And.NotHaveStdErr();
+
+            new ListPackageCommand()
+                .WithPath(projectDirectory)
+                .Execute(args: "--outdated " + args)
+                .Should()
+                .Pass()
+                .And.NotHaveStdErr()
+                .And.HaveStdOutContainingIgnoreSpaces(packageName + "[" + currentVersion + ",)" + currentVersion + expectedVersion);
+        }
+
     }
 }
