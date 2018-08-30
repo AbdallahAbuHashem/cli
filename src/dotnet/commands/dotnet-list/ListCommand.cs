@@ -8,7 +8,6 @@ using Microsoft.DotNet.Cli.CommandLine;
 using Microsoft.DotNet.Cli.Utils;
 using Microsoft.DotNet.Tools.List.ProjectToProjectReferences;
 using Microsoft.DotNet.Tools.List.PackageReferences;
-using System.Diagnostics;
 
 namespace Microsoft.DotNet.Tools.List
 {

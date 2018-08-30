@@ -3,7 +3,6 @@
 
 using System.Linq;
 using Microsoft.DotNet.Cli.CommandLine;
-using Microsoft.DotNet.Tools;
 using LocalizableStrings = Microsoft.DotNet.Tools.List.PackageReferences.LocalizableStrings;
 
 namespace Microsoft.DotNet.Cli
@@ -19,11 +18,9 @@ namespace Microsoft.DotNet.Cli
                               LocalizableStrings.CmdOutdatedDescription),
                 Create.Option("--framework",
                               LocalizableStrings.CmdFrameworkDescription,
-                              Accept.ExactlyOneArgument()
+                              Accept.OneOrMoreArguments()
                                     .With(name: LocalizableStrings.CmdFramework)
-                                    .ForwardAsSingle(o => $"--framework {o.Arguments.Single()}")),
-                Create.Option("--deprecated",
-                              LocalizableStrings.CmdDeprecatedDescription),
+                                    .ForwardAsSingle(o => $"--framework {string.Join("%3B", o.Arguments)}")),
                 Create.Option("--include-transitive",
                               LocalizableStrings.CmdTransitiveDescription),
                 Create.Option("--include-prerelease",
@@ -39,8 +36,8 @@ namespace Microsoft.DotNet.Cli
                                     .ForwardAsSingle(o => $"--config {o.Arguments.Single()}")),
                 Create.Option("--source",
                               LocalizableStrings.CmdSourceDescription,
-                              Accept.ExactlyOneArgument()
+                              Accept.OneOrMoreArguments()
                                     .With(name: LocalizableStrings.CmdSource)
-                                    .ForwardAsSingle(o => $"--source {o.Arguments.Single()}")));
+                                    .ForwardAsSingle(o => $"--source {string.Join("%3B", o.Arguments)}")));
     }
 }

@@ -17,8 +17,6 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
             _output = output;
         }
 
-
-
         [Fact]
         public void RequestedAndResolvedVersionsMatch()
         {
@@ -50,7 +48,7 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
                 .Should()
                 .Pass()
                 .And.NotHaveStdErr()
-                .And.HaveStdOutContainingIgnoreSpaces(packageName+"["+packageVersion+",)"+packageVersion);
+                .And.HaveStdOutContainingIgnoreSpaces(packageName+packageVersion+packageVersion);
         }
 
         [Fact]
@@ -78,7 +76,7 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
                 .Pass()
                 .And.NotHaveStdErr()
                 .And.HaveStdOutContainingIgnoreSpaces("Microsoft.NETCore.App(A)")
-                .And.HaveStdOutContainingIgnoreSpaces("A:Auto-referencedpackage");
+                .And.HaveStdOutContainingIgnoreSpaces("(A):Auto-referencedpackage");
         }
 
         [Fact]
@@ -163,13 +161,13 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
         }
 
         [Theory]
-        [InlineData("", "'net451'", null)]
-        [InlineData("", "'netcoreapp2.2'", null)]
-        [InlineData("--framework=netcoreapp2.2,net451,randomtext", "'net451'", null)]
-        [InlineData("--framework=netcoreapp2.2,net451,randomtext", "'netcoreapp2.2'", null)]
-        [InlineData("--framework=netcoreapp2.2", "'netcoreapp2.2'", "'net451'")]
-        [InlineData("--framework=randomtext", "No packages were found for the project", "'netcoreapp2.2'")]
-        public void FrameworkSpecificList(string args, string shouldInclude, string shouldntInclude)
+        [InlineData("", "[.NETFramework,Version=v4.5.1]", null)]
+        [InlineData("", "[.NETCoreApp,Version=v2.2]", null)]
+        [InlineData("--framework netcoreapp2.2 --framework net451", "[.NETFramework,Version=v4.5.1]", null)]
+        [InlineData("--framework netcoreapp2.2 --framework net451", "[.NETCoreApp,Version=v2.2]", null)]
+        [InlineData("--framework netcoreapp2.2", "[.NETCoreApp,Version=v2.2]", "[.NETFramework,Version=v4.5.1]")]
+        [InlineData("--framework net451", "[.NETFramework,Version=v4.5.1]", "[.NETCoreApp,Version=v2.2]")]
+        public void FrameworkSpecificList_Success(string args, string shouldInclude, string shouldntInclude)
         {
             var testAsset = "MSBuildAppWithMultipleFrameworks";
             var projectDirectory = TestAssets
@@ -211,6 +209,30 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
         }
 
         [Fact]
+        public void FrameworkSpecificList_Fail()
+        {
+            var testAsset = "MSBuildAppWithMultipleFrameworks";
+            var projectDirectory = TestAssets
+                .Get(testAsset)
+                .CreateInstance()
+                .WithSourceFiles()
+                .Root
+                .FullName;
+
+            new RestoreCommand()
+              .WithWorkingDirectory(projectDirectory)
+              .Execute()
+              .Should()
+              .Pass();
+
+            new ListPackageCommand()
+            .WithPath(projectDirectory)
+            .Execute("--framework invalid")
+            .Should()
+            .Fail();
+        }
+
+        [Fact]
         public void FSharpProject()
         {
             var testAsset = "FSharpTestAppSimple";
@@ -234,42 +256,6 @@ namespace Microsoft.DotNet.Cli.List.Package.Tests
                 .Should()
                 .Pass()
                 .And.NotHaveStdErr();
-        }
-
-        [Theory]
-        [InlineData("RestSharp", "105.0.0", "--highest-patch", "105.0.1")]
-        [InlineData("RestSharp", "105.0.0", "--highest-minor", "105.2.3")]
-        [InlineData("SlowCheetah.Xdt", "1.1.1", "--include-prerelease", "1.1.7-beta")]
-        [InlineData("SlowCheetah.Xdt", "1.1.1-beta", "", "1.1.7-beta")]
-        public void OutdatedVersionsTests(string packageName, string currentVersion, string args, string expectedVersion)
-        {
-            var testAsset = "TestAppSimple";
-            var projectDirectory = TestAssets
-                .Get(testAsset)
-                .CreateInstance()
-                .WithSourceFiles()
-                .Root
-                .FullName;
-
-            var cmd = new DotnetCommand()
-                .WithWorkingDirectory(projectDirectory)
-                .ExecuteWithCapturedOutput($"add package {packageName} --version {currentVersion}");
-            cmd.Should().Pass();
-
-            new RestoreCommand()
-               .WithWorkingDirectory(projectDirectory)
-               .Execute()
-               .Should()
-               .Pass()
-               .And.NotHaveStdErr();
-
-            new ListPackageCommand()
-                .WithPath(projectDirectory)
-                .Execute(args: "--outdated " + args)
-                .Should()
-                .Pass()
-                .And.NotHaveStdErr()
-                .And.HaveStdOutContainingIgnoreSpaces(packageName + "[" + currentVersion + ",)" + currentVersion + expectedVersion);
         }
 
     }
